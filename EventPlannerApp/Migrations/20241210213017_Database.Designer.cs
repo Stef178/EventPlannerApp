@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventPlannerApp.Migrations
 {
     [DbContext(typeof(EventPlannerContext))]
-    [Migration("20241210095929_newdatabase")]
-    partial class newdatabase
+    [Migration("20241210213017_Database")]
+    partial class Database
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -81,7 +81,6 @@ namespace EventPlannerApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Location")

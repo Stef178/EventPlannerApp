@@ -6,11 +6,8 @@ namespace EventPlannerApp.Data
     // DbContext class
     public class EventPlannerContext : DbContext
     {
-        public EventPlannerContext(DbContextOptions<EventPlannerContext> options)
-            : base(options)
-        {
-        }
 
+        public EventPlannerContext(DbContextOptions<EventPlannerContext> options) : base(options) { }
         public DbSet<Event> Events { get; set; }
         public DbSet<Organisor> Organisors { get; set; }
         public DbSet<Category> Categories { get; set; }

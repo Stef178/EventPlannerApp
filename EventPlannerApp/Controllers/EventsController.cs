@@ -51,8 +51,8 @@ namespace EventPlannerApp.Controllers
         // GET: Events/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id");
-            ViewData["OrganisorId"] = new SelectList(_context.Organisors, "Id", "Id");
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["OrganisorId"] = new SelectList(_context.Organisors, "Id", "Name");
             return View();
         }
 
@@ -67,8 +67,8 @@ namespace EventPlannerApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", @event.CategoryId);
-            ViewData["OrganisorId"] = new SelectList(_context.Organisors, "Id", "Id", @event.OrganisorId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", @event.CategoryId);
+            ViewData["OrganisorId"] = new SelectList(_context.Organisors, "Id", "Name", @event.OrganisorId);
             return View(@event);
         }
 
@@ -85,8 +85,8 @@ namespace EventPlannerApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", @event.CategoryId);
-            ViewData["OrganisorId"] = new SelectList(_context.Organisors, "Id", "Id", @event.OrganisorId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", @event.CategoryId);
+            ViewData["OrganisorId"] = new SelectList(_context.Organisors, "Id", "Name", @event.OrganisorId);
             return View(@event);
         }
 
@@ -120,8 +120,8 @@ namespace EventPlannerApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", @event.CategoryId);
-            ViewData["OrganisorId"] = new SelectList(_context.Organisors, "Id", "Id", @event.OrganisorId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", @event.CategoryId);
+            ViewData["OrganisorId"] = new SelectList(_context.Organisors, "Id", "Name", @event.OrganisorId);
             return View(@event);
         }
 
