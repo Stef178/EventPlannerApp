@@ -50,9 +50,9 @@ namespace EventPlannerApp.Controllers
         // GET: Tickets/Create
         public IActionResult Create()
         {
-            ViewData["CashierId"] = new SelectList(_context.Cashiers, "Id", "Id");
-            ViewData["EventId"] = new SelectList(_context.Events, "Id", "Id");
-            ViewData["ParticipantId"] = new SelectList(_context.Participants, "Id", "Id");
+            ViewData["CashierId"] = new SelectList(_context.Cashiers, "Id", "Name");
+            ViewData["EventId"] = new SelectList(_context.Events, "Id", "Name");
+            ViewData["ParticipantId"] = new SelectList(_context.Participants, "Id", "Name");
             return View();
         }
 
@@ -69,9 +69,9 @@ namespace EventPlannerApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CashierId"] = new SelectList(_context.Cashiers, "Id", "Id", ticket.CashierId);
-            ViewData["EventId"] = new SelectList(_context.Events, "Id", "Id", ticket.EventId);
-            ViewData["ParticipantId"] = new SelectList(_context.Participants, "Id", "Id", ticket.ParticipantId);
+            ViewData["CashierId"] = new SelectList(_context.Cashiers, "Id", "Name", ticket.CashierId);
+            ViewData["EventId"] = new SelectList(_context.Events, "Id", "Name", ticket.EventId);
+            ViewData["ParticipantId"] = new SelectList(_context.Participants, "Id", "Name", ticket.ParticipantId);
             return View(ticket);
         }
 
@@ -88,9 +88,9 @@ namespace EventPlannerApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["CashierId"] = new SelectList(_context.Cashiers, "Id", "Id", ticket.CashierId);
-            ViewData["EventId"] = new SelectList(_context.Events, "Id", "Id", ticket.EventId);
-            ViewData["ParticipantId"] = new SelectList(_context.Participants, "Id", "Id", ticket.ParticipantId);
+            ViewData["CashierId"] = new SelectList(_context.Cashiers, "Id", "Name", ticket.CashierId);
+            ViewData["EventId"] = new SelectList(_context.Events, "Id", "Name", ticket.EventId);
+            ViewData["ParticipantId"] = new SelectList(_context.Participants, "Id", "Name", ticket.ParticipantId);
             return View(ticket);
         }
 
@@ -126,9 +126,9 @@ namespace EventPlannerApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CashierId"] = new SelectList(_context.Cashiers, "Id", "Id", ticket.CashierId);
-            ViewData["EventId"] = new SelectList(_context.Events, "Id", "Id", ticket.EventId);
-            ViewData["ParticipantId"] = new SelectList(_context.Participants, "Id", "Id", ticket.ParticipantId);
+            ViewData["CashierId"] = new SelectList(_context.Cashiers, "Id", "Name", ticket.CashierId);
+            ViewData["EventId"] = new SelectList(_context.Events, "Id", "Name", ticket.EventId);
+            ViewData["ParticipantId"] = new SelectList(_context.Participants, "Id", "Name", ticket.ParticipantId);
             return View(ticket);
         }
 

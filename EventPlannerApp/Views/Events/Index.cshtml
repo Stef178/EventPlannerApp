@@ -63,14 +63,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
+                <td>
+                    <img src="@Html.Raw(Url.Content(item.ImageUrl))" alt="Afbeelding niet gevonden" />
+                </td>
+
+
             <td>
-                @Html.DisplayFor(modelItem => item.ImageUrl)
+                @Html.DisplayFor(modelItem => item.Organisor.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Organisor.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Id)
+                @Html.DisplayFor(modelItem => item.Category.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

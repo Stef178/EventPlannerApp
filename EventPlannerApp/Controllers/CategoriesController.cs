@@ -10,27 +10,22 @@ using EventPlannerApp.Models;
 
 namespace EventPlannerApp.Controllers
 {
-    public class OrganisorsController : Controller
+    public class CategoriesController : Controller
     {
         private readonly EventPlannerContext _context;
 
-        public OrganisorsController(EventPlannerContext context)
+        public CategoriesController(EventPlannerContext context)
         {
             _context = context;
         }
 
-        public IActionResult Admin()
-        {
-            return View();
-        }
-
-        // GET: Organisors
+        // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Organisors.ToListAsync());
+            return View(await _context.Categories.ToListAsync());
         }
 
-        // GET: Organisors/Details/5
+        // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -38,39 +33,39 @@ namespace EventPlannerApp.Controllers
                 return NotFound();
             }
 
-            var organisor = await _context.Organisors
+            var category = await _context.Categories
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (organisor == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(organisor);
+            return View(category);
         }
 
-        // GET: Organisors/Create
+        // GET: Categories/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Organisors/Create
+        // POST: Categories/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Email")] Organisor organisor)
+        public async Task<IActionResult> Create([Bind("Id,Name")] Category category)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(organisor);
+                _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(organisor);
+            return View(category);
         }
 
-        // GET: Organisors/Edit/5
+        // GET: Categories/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -78,22 +73,22 @@ namespace EventPlannerApp.Controllers
                 return NotFound();
             }
 
-            var organisor = await _context.Organisors.FindAsync(id);
-            if (organisor == null)
+            var category = await _context.Categories.FindAsync(id);
+            if (category == null)
             {
                 return NotFound();
             }
-            return View(organisor);
+            return View(category);
         }
 
-        // POST: Organisors/Edit/5
+        // POST: Categories/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Email")] Organisor organisor)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Category category)
         {
-            if (id != organisor.Id)
+            if (id != category.Id)
             {
                 return NotFound();
             }
@@ -102,12 +97,12 @@ namespace EventPlannerApp.Controllers
             {
                 try
                 {
-                    _context.Update(organisor);
+                    _context.Update(category);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrganisorExists(organisor.Id))
+                    if (!CategoryExists(category.Id))
                     {
                         return NotFound();
                     }
@@ -118,10 +113,10 @@ namespace EventPlannerApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(organisor);
+            return View(category);
         }
 
-        // GET: Organisors/Delete/5
+        // GET: Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -129,34 +124,34 @@ namespace EventPlannerApp.Controllers
                 return NotFound();
             }
 
-            var organisor = await _context.Organisors
+            var category = await _context.Categories
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (organisor == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(organisor);
+            return View(category);
         }
 
-        // POST: Organisors/Delete/5
+        // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var organisor = await _context.Organisors.FindAsync(id);
-            if (organisor != null)
+            var category = await _context.Categories.FindAsync(id);
+            if (category != null)
             {
-                _context.Organisors.Remove(organisor);
+                _context.Categories.Remove(category);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool OrganisorExists(int id)
+        private bool CategoryExists(int id)
         {
-            return _context.Organisors.Any(e => e.Id == id);
+            return _context.Categories.Any(e => e.Id == id);
         }
     }
 }
