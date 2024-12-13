@@ -20,10 +20,23 @@ namespace EventPlannerApp.Controllers
         }
 
         // GET: Tickets
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Tickets()
         {
-            var eventPlannerContext = _context.Tickets.Include(t => t.Cashier).Include(t => t.Event).Include(t => t.Participant);
-            return View(await eventPlannerContext.ToListAsync());
+            var cashiers = _context.Cashiers.Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.Name
+            }).ToList();
+
+            ViewData["Cashiers"] = cashiers;
+
+            var tickets = _context.Tickets
+                .Include(t => t.Cashier)
+                .Include(t => t.Event)
+                .Include(t => t.Participant)
+                .ToList();
+
+            return View(tickets);
         }
 
         // GET: Tickets/Details/5
@@ -57,8 +70,6 @@ namespace EventPlannerApp.Controllers
         }
 
         // POST: Tickets/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,OrderNumber,IsPaid,EventId,ParticipantId,CashierId")] Ticket ticket)
@@ -67,7 +78,7 @@ namespace EventPlannerApp.Controllers
             {
                 _context.Add(ticket);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Tickets));
             }
             ViewData["CashierId"] = new SelectList(_context.Cashiers, "Id", "Name", ticket.CashierId);
             ViewData["EventId"] = new SelectList(_context.Events, "Id", "Name", ticket.EventId);
@@ -95,8 +106,6 @@ namespace EventPlannerApp.Controllers
         }
 
         // POST: Tickets/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,OrderNumber,IsPaid,EventId,ParticipantId,CashierId")] Ticket ticket)
@@ -124,7 +133,7 @@ namespace EventPlannerApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Tickets));
             }
             ViewData["CashierId"] = new SelectList(_context.Cashiers, "Id", "Name", ticket.CashierId);
             ViewData["EventId"] = new SelectList(_context.Events, "Id", "Name", ticket.EventId);
@@ -165,12 +174,25 @@ namespace EventPlannerApp.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Tickets));
         }
 
         private bool TicketExists(int id)
         {
             return _context.Tickets.Any(e => e.Id == id);
+        }
+
+        public async Task<IActionResult> MarkAsPaid(int ticketId, int cashierId)
+        {
+            var ticket = await _context.Tickets.FindAsync(ticketId);
+            if (ticket != null)
+            {
+                ticket.IsPaid = true;
+                ticket.CashierId = cashierId;
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Tickets));
         }
     }
 }
