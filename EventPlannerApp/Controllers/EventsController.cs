@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using EventPlannerApp.Data;
 using EventPlannerApp.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EventPlannerApp.Controllers
 {
@@ -19,16 +19,15 @@ namespace EventPlannerApp.Controllers
             _context = context;
         }
 
-        // GET: Events
         public async Task<IActionResult> Index()
         {
-            var eventPlannerContext = _context.Events
-                                               .Include(e => e.Category)
-                                               .Include(e => e.Organisor);
-            return View(await eventPlannerContext.ToListAsync());
+            var events = await _context.Events
+                .Include(e => e.Category)
+                .Include(e => e.Organisor)
+                .ToListAsync();
+            return View(events);
         }
 
-        // GET: Events/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -37,9 +36,11 @@ namespace EventPlannerApp.Controllers
             }
 
             var @event = await _context.Events
-                                       .Include(e => e.Category)
-                                       .Include(e => e.Organisor)
-                                       .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(e => e.Category)
+                .Include(e => e.Organisor)
+                .Include(e => e.Tickets)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (@event == null)
             {
                 return NotFound();
@@ -48,7 +49,39 @@ namespace EventPlannerApp.Controllers
             return View(@event);
         }
 
-        // GET: Events/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReserveTicket(int eventId, int participantId)
+        {
+            var @event = await _context.Events.Include(e => e.Tickets).FirstOrDefaultAsync(e => e.Id == eventId);
+
+            if (@event == null || @event.Date < DateTime.Now)
+            {
+                return NotFound();
+            }
+
+            var reservedTickets = @event.Tickets?.Count ?? 0;
+
+            if (reservedTickets >= @event.MaxParticipants)
+            {
+                return BadRequest("Er zijn geen vrije plaatsen meer beschikbaar.");
+            }
+
+            var ticket = new Ticket
+            {
+                EventId = eventId,
+                ParticipantId = participantId,
+                OrderNumber = Guid.NewGuid().ToString(),
+                IsPaid = false
+            };
+
+            _context.Tickets.Add(ticket);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { id = eventId });
+        }
+
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
@@ -56,10 +89,9 @@ namespace EventPlannerApp.Controllers
             return View();
         }
 
-        // POST: Events/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Location,Date,Cost,MaxParticipants,Description,ImageUrl,OrganisorId,CategoryId")] Event @event)
+        public async Task<IActionResult> Create([Bind("Id,Name,Location,Date,Cost,MaxParticipants,AvailableSlots,Description,ImageUrl,OrganisorId,CategoryId")] Event @event)
         {
             if (ModelState.IsValid)
             {
@@ -72,7 +104,6 @@ namespace EventPlannerApp.Controllers
             return View(@event);
         }
 
-        // GET: Events/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,7 +121,6 @@ namespace EventPlannerApp.Controllers
             return View(@event);
         }
 
-        // POST: Events/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Location,Date,Cost,MaxParticipants,Description,ImageUrl,OrganisorId,CategoryId")] Event @event)
@@ -125,7 +155,6 @@ namespace EventPlannerApp.Controllers
             return View(@event);
         }
 
-        // GET: Events/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,9 +163,9 @@ namespace EventPlannerApp.Controllers
             }
 
             var @event = await _context.Events
-                                       .Include(e => e.Category)
-                                       .Include(e => e.Organisor)
-                                       .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(e => e.Category)
+                .Include(e => e.Organisor)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (@event == null)
             {
                 return NotFound();
@@ -145,7 +174,6 @@ namespace EventPlannerApp.Controllers
             return View(@event);
         }
 
-        // POST: Events/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -163,6 +191,11 @@ namespace EventPlannerApp.Controllers
         private bool EventExists(int id)
         {
             return _context.Events.Any(e => e.Id == id);
+        }
+
+        public IActionResult Tickets()
+        {
+            return View();
         }
     }
 }

@@ -64,6 +64,9 @@ namespace EventPlannerApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AvailableSlots")
+                        .HasColumnType("int");
+
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -153,7 +156,7 @@ namespace EventPlannerApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CashierId")
+                    b.Property<int?>("CashierId")
                         .HasColumnType("int");
 
                     b.Property<int>("EventId")
@@ -203,9 +206,7 @@ namespace EventPlannerApp.Migrations
                 {
                     b.HasOne("EventPlannerApp.Models.Cashier", "Cashier")
                         .WithMany("Tickets")
-                        .HasForeignKey("CashierId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CashierId");
 
                     b.HasOne("EventPlannerApp.Models.Event", "Event")
                         .WithMany("Tickets")

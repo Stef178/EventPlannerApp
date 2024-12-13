@@ -12,8 +12,7 @@
         public int ParticipantId { get; set; }
         public Participant? Participant { get; set; }
 
-        public int CashierId { get; set; }
+        public int? CashierId { get; set; }
         public Cashier? Cashier { get; set; }
     }
-
 }

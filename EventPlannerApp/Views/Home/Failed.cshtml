@@ -1,0 +1,14 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Mislukt!</h4>
+        <p>Er is een fout opgetreden bij het reserveren van je ticket. Het lijkt erop dat u nog niet bij ons geregistreerd staat. Meld u aan als deelnemer via de onderstaande knop</p>
+    </div>
+</div>
+
+<button onclick="window.location.href='@Url.Action("Create", "Participants")';">
+    Als deelnemer aanmelden
+</button>

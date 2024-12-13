@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Collections.Generic;
 
 namespace EventPlannerApp.Models
 {
@@ -20,6 +21,7 @@ namespace EventPlannerApp.Models
         public Category? Category { get; set; }
 
         public ICollection<Ticket>? Tickets { get; set; }
-    }
 
+        public int? AvailableSlots { get; set; }
+    }
 }
