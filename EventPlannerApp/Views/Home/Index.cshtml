@@ -25,6 +25,9 @@
                 <td>
                     <img src="@Html.Raw(Url.Content(item.ImageUrl))" alt="Afbeelding niet gevonden" style="width:200px; height:auto;" />
                 </td>
+                <td>
+                    <a href="@Url.Action("EventData", "Home", new { id = item.Id })" class="btn btn-info">Meer informatie</a>
+                </td>
             </tr>
         }
     </tbody>

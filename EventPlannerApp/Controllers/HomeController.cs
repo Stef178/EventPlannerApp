@@ -30,6 +30,16 @@ namespace EventPlannerApp.Controllers
             return View();
         }
 
+        public IActionResult EventData(int id)
+        {
+            var eventDetails = _context.Events.FirstOrDefault(e => e.Id == id);
+            if (eventDetails == null)
+            {
+                return NotFound();
+            }
+            return View(eventDetails);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
