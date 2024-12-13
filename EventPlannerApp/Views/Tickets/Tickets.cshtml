@@ -1,4 +1,6 @@
-﻿<h1>Tickets voor event</h1>
+﻿@model IEnumerable<EventPlannerApp.Models.Ticket>
+
+<h1>Alle Tickets</h1>
 <table class="table">
     <thead>
         <tr>
@@ -20,6 +22,15 @@
                     {
                         <form asp-action="MarkAsPaid" method="post">
                             <input type="hidden" name="ticketId" value="@ticket.Id" />
+                            <div class="form-group">
+                                <label for="cashierId">Selecteer kassier</label>
+                                <select name="cashierId" id="cashierId" class="form-control">
+                                    @foreach (var cashier in ViewData["Cashiers"] as IEnumerable<SelectListItem>)
+                                    {
+                                        <option value="@cashier.Value">@cashier.Text</option>
+                                    }
+                                </select>
+                            </div>
                             <button type="submit" class="btn btn-success">Markeer als betaald</button>
                         </form>
                     }
