@@ -1,0 +1,7 @@
+@EvenementenAPI_HostAddress = http://localhost:5052
+
+GET http://localhost:5052/api/EventAPI/
+Accept: application/json
+
+
+###
