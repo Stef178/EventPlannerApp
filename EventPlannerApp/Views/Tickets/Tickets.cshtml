@@ -34,6 +34,11 @@
                             <button type="submit" class="btn btn-success">Markeer als betaald</button>
                         </form>
                     }
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" name="ticketId" value="@ticket.Id" />
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+
                 </td>
             </tr>
         }
