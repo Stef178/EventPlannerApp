@@ -33,6 +33,15 @@ namespace EventPlannerApp.Controllers
             return View();
         }
 
+        public IActionResult Info()
+        {
+            return View();
+        }
+        public IActionResult Admin()
+        {
+            return View();
+        }
+
         public IActionResult EventData(int id)
         {
             var eventDetails = _context.Events.FirstOrDefault(e => e.Id == id);
