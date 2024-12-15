@@ -203,5 +203,10 @@ namespace EventPlannerApp.Controllers
 
             return RedirectToAction(nameof(Tickets));
         }
+
+        public IActionResult Index()
+        {
+            return View();
+        }
     }
 }

@@ -19,11 +19,6 @@ namespace EventPlannerApp.Controllers
             _context = context;
         }
 
-        public IActionResult Admin()
-        {
-            return View();
-        }
-
         // GET: Organisors
         public async Task<IActionResult> Index()
         {
