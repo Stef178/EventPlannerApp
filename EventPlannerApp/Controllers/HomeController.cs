@@ -13,17 +13,17 @@ namespace EventPlannerApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly EventPlannerContext _context; // Je DbContext
+        private readonly EventPlannerContext _context;
 
         public HomeController(ILogger<HomeController> logger, EventPlannerContext context)
         {
             _logger = logger;
             _context = context;
         }
-
+        //Views genereren
         public IActionResult Index()
         {
-            // Haal alle toekomstige evenementen op
+            
             var events = _context.Events.Where(e => e.Date >= DateTime.Now).ToList();
             return View(events);
         }
@@ -52,6 +52,7 @@ namespace EventPlannerApp.Controllers
             return View(eventDetails);
         }
 
+        // Ticket reserveren
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ReserveTicket(int eventId, string userEmail)
@@ -62,21 +63,21 @@ namespace EventPlannerApp.Controllers
 
             if (@event == null || @event.Date <= DateTime.Now || @event.MaxParticipants <= 0)
             {
-                return RedirectToAction("Failed"); // Redirect naar Failed pagina als evenement niet beschikbaar is
+                return RedirectToAction("Failed");
             }
 
             if (string.IsNullOrEmpty(userEmail))
             {
                 ModelState.AddModelError(nameof(userEmail), "Email is vereist.");
-                return View("EventData", @event); // Geef gebruikers de mogelijkheid om terug te gaan
+                return View("EventData", @event); 
             }
 
-            // Controleer of de deelnemer al bestaat
+          
             var participant = _context.Participants.FirstOrDefault(p => p.Email == userEmail);
 
             if (participant == null)
             {
-                return RedirectToAction("Failed"); // Redirect naar Failed pagina als deelnemer niet gevonden wordt
+                return RedirectToAction("Failed");
             }
 
             try
@@ -91,7 +92,7 @@ namespace EventPlannerApp.Controllers
 
                 _context.Tickets.Add(ticket);
 
-                // Directe update van MaxAvailableSlots in database
+                
                 var eventToUpdate = await _context.Events.FindAsync(eventId);
                 if (eventToUpdate != null)
                 {
@@ -106,9 +107,9 @@ namespace EventPlannerApp.Controllers
             }
             catch (Exception ex)
             {
-                // Voor extra foutbeheer, bijvoorbeeld als er een fout is met de database
+                
                 _logger.LogError(ex, "Error bij het reserveren van ticket.");
-                return RedirectToAction("Failed"); // Redirect naar Failed pagina bij fout
+                return RedirectToAction("Failed"); 
             }
         }
 

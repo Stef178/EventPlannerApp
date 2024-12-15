@@ -49,38 +49,6 @@ namespace EventPlannerApp.Controllers
             return View(@event);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ReserveTicket(int eventId, int participantId)
-        {
-            var @event = await _context.Events.Include(e => e.Tickets).FirstOrDefaultAsync(e => e.Id == eventId);
-
-            if (@event == null || @event.Date < DateTime.Now)
-            {
-                return NotFound();
-            }
-
-            var reservedTickets = @event.Tickets?.Count ?? 0;
-
-            if (reservedTickets >= @event.MaxParticipants)
-            {
-                return BadRequest("Er zijn geen vrije plaatsen meer beschikbaar.");
-            }
-
-            var ticket = new Ticket
-            {
-                EventId = eventId,
-                ParticipantId = participantId,
-                OrderNumber = Guid.NewGuid().ToString(),
-                IsPaid = false
-            };
-
-            _context.Tickets.Add(ticket);
-
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Details), new { id = eventId });
-        }
 
         public IActionResult Create()
         {
@@ -88,7 +56,7 @@ namespace EventPlannerApp.Controllers
             ViewData["OrganisorId"] = new SelectList(_context.Organisors, "Id", "Name");
             return View();
         }
-
+        // Ticket aanmaken
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Location,Date,Cost,MaxParticipants,AvailableSlots,Description,ImageUrl,OrganisorId,CategoryId")] Event @event)
@@ -104,6 +72,8 @@ namespace EventPlannerApp.Controllers
             return View(@event);
         }
 
+
+        // Edit event GET
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -121,6 +91,8 @@ namespace EventPlannerApp.Controllers
             return View(@event);
         }
 
+
+        // Edit event POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Location,Date,Cost,MaxParticipants,Description,ImageUrl,OrganisorId,CategoryId")] Event @event)
@@ -154,7 +126,7 @@ namespace EventPlannerApp.Controllers
             ViewData["OrganisorId"] = new SelectList(_context.Organisors, "Id", "Name", @event.OrganisorId);
             return View(@event);
         }
-
+        //Delete GET
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -173,7 +145,7 @@ namespace EventPlannerApp.Controllers
 
             return View(@event);
         }
-
+        //Delete POST
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
