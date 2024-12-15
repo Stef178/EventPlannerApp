@@ -162,20 +162,29 @@ namespace EventPlannerApp.Controllers
             return View(ticket);
         }
 
-        // POST: Tickets/Delete/5
-        [HttpPost, ActionName("Delete")]
+        // POST: Tickets/Delete
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int ticketId)
         {
-            var ticket = await _context.Tickets.FindAsync(id);
+            var ticket = await _context.Tickets.Include(t => t.Event).FirstOrDefaultAsync(t => t.Id == ticketId);
+
             if (ticket != null)
             {
-                _context.Tickets.Remove(ticket);
-            }
+                // Als het ticket gekoppeld is aan een evenement, verhoog de beschikbare plaatsen
+                if (ticket.Event != null)
+                {
+                    ticket.Event.AvailableSlots += 1;
+                    _context.Update(ticket.Event);
+                }
 
-            await _context.SaveChangesAsync();
+                // Verwijder het ticket
+                _context.Tickets.Remove(ticket);
+                await _context.SaveChangesAsync();
+            }
             return RedirectToAction(nameof(Tickets));
         }
+
 
         private bool TicketExists(int id)
         {
