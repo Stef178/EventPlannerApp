@@ -5,6 +5,7 @@
     <thead>
         <tr>
             <th>Ordernummer</th>
+            <th>Evenement</th>
             <th>Deelnemer</th>
             <th>Betaald</th>
             <th>Actie</th>
@@ -15,6 +16,7 @@
         {
             <tr>
                 <td>@ticket.OrderNumber</td>
+                <td>@ticket.Event.Name</td>
                 <td>@ticket.Participant.Name</td>
                 <td>@(ticket.IsPaid ? "Ja" : "Nee")</td>
                 <td>
@@ -36,9 +38,8 @@
                     }
                     <form asp-action="Delete" method="post">
                         <input type="hidden" name="ticketId" value="@ticket.Id" />
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <button type="submit" class="btn btn-danger">Ticket verwijderen</button>
                     </form>
-
                 </td>
             </tr>
         }

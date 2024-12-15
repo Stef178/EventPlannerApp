@@ -60,11 +60,8 @@
             <td>
                 @Html.DisplayFor(modelItem => item.MaxParticipants)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
                 <td>
-                    <img src="@Html.Raw(Url.Content(item.ImageUrl))" alt="Afbeelding niet gevonden" />
+                    <img src="@Html.Raw(Url.Content(item.ImageUrl))" alt="Afbeelding niet gevonden" style="width:200px; height:auto;" />
                 </td>
 
 

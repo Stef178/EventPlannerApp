@@ -43,8 +43,6 @@ namespace EventPlannerApp.Controllers
             return View(eventDetails);
         }
 
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ReserveTicket(int eventId, string userEmail)
@@ -93,6 +91,7 @@ namespace EventPlannerApp.Controllers
                     await _context.SaveChangesAsync();
                 }
 
+                TempData["OrderNumber"] = ticket.OrderNumber;
                 TempData["SuccessMessage"] = "Je ticket is succesvol gereserveerd!";
                 return RedirectToAction("Success");
             }
@@ -103,9 +102,6 @@ namespace EventPlannerApp.Controllers
                 return RedirectToAction("Failed"); // Redirect naar Failed pagina bij fout
             }
         }
-
-
-
 
         public IActionResult Error()
         {
@@ -118,11 +114,6 @@ namespace EventPlannerApp.Controllers
         }
 
         public IActionResult Failed()
-        {
-            return View();
-        }
-
-        public IActionResult Admin()
         {
             return View();
         }
