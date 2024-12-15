@@ -60,7 +60,7 @@ namespace EventPlannerApp.Controllers
             {
                 _context.Add(participant);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction(nameof(Index));
             }
             return View(participant);
         }
